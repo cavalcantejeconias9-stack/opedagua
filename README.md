@@ -1,2 +1,0 @@
-# opedagua
-app de clima
