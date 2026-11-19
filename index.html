@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#121212">
+<meta name="theme-color" content="#0F2B4F">
 <meta name="description" content="Clima em Balsas-MA e região: agora, por hora, 5 dias, chuva, vento e a Sabedoria do Sertão.">
 <title>Ô Pé d'Água • Clima de Balsas-MA</title>
 <link rel="manifest" href="manifest.json">
@@ -15,7 +15,7 @@
    ============================================================ */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#000000;
+  --bg:#0F2B4F;
   --card:#14293D;
   --card2:#1B3650;
   --card3:#22425F;
@@ -314,7 +314,7 @@ h1{
    ============================================================ */
 .avatar-float{
   position:relative;flex:none;
-  width:clamp(96px,22vw,124px);height:clamp(112px,26vw,150px);
+  width:clamp(112px,25.5vw,140px);height:clamp(132px,30vw,172px);
   display:flex;align-items:center;justify-content:center;
   background:none;border:0;padding:0;cursor:pointer;
   filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));
@@ -379,6 +379,20 @@ h1{
 }
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
+.alarmrain{position:fixed;inset:0;z-index:150;pointer-events:none;overflow:hidden;background:linear-gradient(180deg,rgba(30,60,90,.4) 0%,rgba(10,22,35,.6) 100%);transition:opacity .4s}
+.alarmrain[hidden]{display:none !important}
+.rdrop{position:absolute;top:-90px;border-radius:3px;background:linear-gradient(180deg,rgba(200,230,255,0) 0%,rgba(190,225,255,.95) 40%,rgba(215,240,255,1) 100%)}
+@keyframes chuvaCair{from{transform:translateY(-10vh)}to{transform:translateY(115vh)}}
+.rmsg{position:absolute;top:24%;left:50%;transform:translateX(-50%);width:min(88vw,380px);text-align:center;background:rgba(8,18,28,.9);border:1px solid #3A5F7F;border-radius:18px;padding:16px 14px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.rmsg h4{margin:0 0 6px;font-size:17px;color:#EAF4FF;letter-spacing:.3px}
+.rmsg p{margin:0;font-size:12.5px;color:#BCD3E4;line-height:1.5}
+
+.alarmsun{position:fixed;inset:0;z-index:150;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 45%,#FFFBE6 0%,#FFED7A 30%,#FFD60A 62%,#FFC200 100%);transition:opacity .4s}
+.alarmsun[hidden]{display:none !important}
+.bigsun{position:absolute;top:47%;left:50%;width:170px;height:170px;transform:translate(-50%,-50%);filter:drop-shadow(0 0 70px rgba(255,185,0,.95));animation:solPulse 1.1s ease-in-out infinite}
+@keyframes solPulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.25)}}
+.smsg{position:absolute;bottom:13%;left:50%;transform:translateX(-50%);width:min(88vw,380px);text-align:center;color:#4A2E00;font-size:16px;font-weight:600;line-height:1.4}
+
 /* esqueleto */
 .skel{background:linear-gradient(90deg,#17304A 25%,#1F405E 37%,#17304A 63%);background-size:400% 100%;animation:sk 1.3s ease infinite;border-radius:8px;color:transparent !important}
 @keyframes sk{0%{background-position:100% 0}100%{background-position:-100% 0}}
@@ -397,6 +411,8 @@ h1{
 </style>
 </head>
 <body>
+<div class="alarmrain" id="alarmRain" hidden></div>
+<div class="alarmsun" id="alarmSun" hidden></div>
 <div class="phone">
 
   <header class="top">
@@ -425,6 +441,8 @@ h1{
       <button data-act="refresh">Atualizar agora</button>
       <button data-act="locais">Minhas localidades</button>
       <button data-act="notifs">🔔 Notificações de chuva</button>
+      <button data-act="testeSol">☀️ Teste: sol forte</button>
+      <button data-act="testeChuva">🌧️ Teste: chuva forte</button>
       <button data-act="sobre">Sobre este app</button>
       <button data-act="fonte">Fonte dos dados</button>
     </div>
@@ -989,6 +1007,7 @@ function aplicarAlerta(){
   if (a.nivel === 'forte' && !state._alertaSom) {
     tocarSomAlerta(true);
     state._alertaSom = Date.now();
+    mostrarAlarmeChuva();
     if ('Notification' in window && Notification.permission === 'granted') {
       const ic = document.getElementById('avatarFloatImg')?.src || 'icone_app.png';
       try { new Notification('🌧️ Chuva forte no caminho!', { body: a.titulo + ' — ' + a.texto, icon: ic }); } catch (e) {}
@@ -1007,6 +1026,53 @@ function alternarAlertas(){
 }
 
 // Toca um som de alerta (Web Audio API) — forte para alerta extremo, curto para confirmacao
+function mostrarAlarmeChuva(){
+  const el = document.getElementById('alarmRain');
+  if (!el) return;
+  const a = state.alerta;
+  const texto = a && a.texto ? a.texto : 'Chuva forte prevista para a região.';
+  el.innerHTML = '<div class="rmsg"><h4>🌧️ CHUVA FORTE</h4><p>' + texto + '</p></div>';
+  for (let i = 0; i < 150; i++) {
+    const d = document.createElement('span');
+    d.className = 'rdrop';
+    d.style.left = (Math.random() * 100).toFixed(1) + 'vw';
+    d.style.width = (Math.random() * 1.5 + 1.5).toFixed(1) + 'px';
+    d.style.height = (50 + Math.random() * 60).toFixed(0) + 'px';
+    d.style.opacity = (Math.random() * 0.55 + 0.45).toFixed(2);
+    d.style.animation = 'chuvaCair ' + (0.85 + Math.random() * 0.95).toFixed(2) + 's ' + (Math.random() * -2).toFixed(2) + 's linear infinite';
+    el.appendChild(d);
+  }
+  // 2 ondas de 15 segundos cada
+  let onda = 0;
+  const mostrar = () => {
+    onda += 1;
+    el.hidden = false;
+    setTimeout(() => {
+      el.hidden = true;
+      if (onda < 2) setTimeout(mostrar, 1500);
+    }, 15000);
+  };
+  mostrar();
+}
+
+function mostrarAlarmeSol(){
+  const el = document.getElementById('alarmSun');
+  if (!el) return;
+  el.innerHTML =
+    '<svg class="bigsun" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sol forte">' +
+      '<g stroke="#FFB200" stroke-width="5.5" stroke-linecap="round">' +
+        '<line x1="50" y1="2" x2="50" y2="17"/><line x1="50" y1="83" x2="50" y2="98"/>' +
+        '<line x1="2" y1="50" x2="17" y2="50"/><line x1="83" y1="50" x2="98" y2="50"/>' +
+        '<line x1="16" y1="16" x2="27" y2="27"/><line x1="73" y1="73" x2="84" y2="84"/>' +
+        '<line x1="16" y1="84" x2="27" y2="73"/><line x1="73" y1="27" x2="84" y2="16"/>' +
+      '</g>' +
+      '<circle cx="50" cy="50" r="17" fill="#FFF6C8" stroke="#FFB200" stroke-width="4.5"/>' +
+    '</svg>' +
+    '<div class="smsg">☀️ SOL FORTE<br>céu limpo fora de hora — passe protetor solar e evite o sol do meio-dia</div>';
+  el.hidden = false;
+  setTimeout(() => { el.hidden = true; }, 15000);
+}
+
 function tocarSomAlerta(forte) {
   try {
     const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -1053,6 +1119,18 @@ function renderTudo(){
   $('#nowIcon').innerHTML = iconSvg(cur.weather_code, isDay, 66);
   $('#cond').textContent = WMO[cur.weather_code] || 'Tempo estável';
   $('#feels').textContent = 'Sensação térmica: ' + Math.round(cur.apparent_temperature) + '°';
+
+  // sol forte -> efeito uma vez por dia
+  try {
+    const hoje = new Date().toISOString().slice(0, 10);
+    const dNow = new Date();
+    const agoraEEH = dNow.getHours();
+    if (d.current.is_day === 1 && [0,1].includes(d.current.weather_code) && agoraEEH >= 10 && agoraEEH <= 16
+        && localStorage.getItem('solale_' + hoje) !== '1') {
+      localStorage.setItem('solale_' + hoje, '1');
+      mostrarAlarmeSol();
+    }
+  } catch (e) {}
 
   // alerta
   state.alerta = calcularAlerta(d);
@@ -1545,6 +1623,12 @@ function iniciarEventos(){
     }
     if (act === 'notifs'){
       ativarNotificacoes();
+    }
+    if (act === 'testeSol'){
+      mostrarAlarmeSol();
+    }
+    if (act === 'testeChuva'){
+      mostrarAlarmeChuva();
     }
   });
 
