@@ -1,43 +1,63 @@
-﻿const CACHE = 'clima-peba-v2';
-const ARQUIVOS = [
-  './app_chuva.html',
+/* Service Worker — Clima Balsas */
+const CACHE = 'clima-balsas-v11';
+const ASSETS = [
+  './',
   './index.html',
   './manifest.json',
   './icone_app.png',
-  './header_banner.jpg',
-  './av_verao.jpg',
-  './av_inverno.jpg',
-  './av_outono.jpg',
-  './av_primavera.jpg',
-  './tempo_verao.jpg',
-  './tempo_inverno.jpg',
-  './tempo_outono.jpg',
-  './tempo_primavera.jpg'
+  './avatar_inicio.png',
+  './avatar_loura.png',
+  './av_verao.png',
+  './av_inverno.png',
+  './av_outono.png',
+  './av_primavera.png'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ARQUIVOS)).then(() => self.skipWaiting())
-  );
+self.addEventListener('install', (e) => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
 
-self.addEventListener('activate', e => {
+self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))
+    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', e => {
-  const url = e.request.url;
-  if (url.includes('power.larc.nasa.gov') || url.includes('open-meteo.com')) return;
+self.addEventListener('fetch', (e) => {
+  const req = e.request;
+  if (req.method !== 'GET') return;
+
+  const url = new URL(req.url);
+
+  // API: sempre rede, sem cache
+  if (url.hostname.includes('open-meteo.com')) {
+    e.respondWith(fetch(req).catch(() => new Response('{}', { headers: { 'Content-Type': 'application/json' } })));
+    return;
+  }
+
+  // Página: rede primeiro (sem cache HTTP), cache como reserva offline
+  if (req.mode === 'navigate') {
+    e.respondWith(
+      fetch(req, { cache: 'no-store' })
+        .then(res => {
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put('./index.html', copy)).catch(() => {});
+          return res;
+        })
+        .catch(() => caches.match(req).then(r => r || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // Arquivos estáticos: rede primeiro, cache como reserva
   e.respondWith(
-    caches.match(e.request).then(resp => resp || fetch(e.request).then(r => {
-      if (r && r.status === 200 && r.type === 'basic') {
-        const copy = r.clone();
-        caches.open(CACHE).then(c => c.put(e.request, copy));
-      }
-      return r;
-    }).catch(() => caches.match('./app_chuva.html')))
+    fetch(req)
+      .then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
+        return res;
+      })
+      .catch(() => caches.match(req))
   );
 });

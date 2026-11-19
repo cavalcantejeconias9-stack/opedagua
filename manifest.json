@@ -1,19 +1,19 @@
 {
-  "name": "Ô PÉ D'ÁGUA - Balsas-MA e Região",
+  "name": "Ô Pé d'Água — Clima de Balsas-MA e Sabedoria do Sertão",
   "short_name": "Ô Pé d'Água",
-  "description": "Clima e precipitação - região das localidades: Balsas-MA, Riachão-MA, Campos Lindos-TO. Dados NASA POWER 1981-2025.",
-  "start_url": "./app_chuva.html",
+  "description": "Clima em tempo real em Balsas-MA e região, com a Sabedoria do Sertão. Fundo escuro, cards azuis e avatar flutuante.",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#eef3f8",
-  "theme_color": "#1a5276",
+  "background_color": "#121212",
+  "theme_color": "#121212",
   "lang": "pt-BR",
   "dir": "ltr",
   "categories": [
-    "education",
     "weather",
-    "utilities"
+    "utilities",
+    "education"
   ],
   "icons": [
     {
@@ -31,9 +31,14 @@
   ],
   "shortcuts": [
     {
-      "name": "Calendario climatico",
-      "short_name": "Calendario",
-      "url": "./app_chuva.html"
+      "name": "Sabedoria do Sertão",
+      "short_name": "Sabedoria",
+      "url": "./index.html#sabedoria"
+    },
+    {
+      "name": "Clima agora",
+      "short_name": "Agora",
+      "url": "./index.html"
     }
   ]
 }
