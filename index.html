@@ -188,6 +188,18 @@ h1{
 .hour .hh{font-size:11px;color:var(--muted);letter-spacing:.2px}
 .hour.agora{background:#1E3D58}
 .hour.agora .hh{color:#EDEDED}
+.hour.rain-low{background:#172A3E;border:1px solid #2A4A66}
+.hour.rain-low .hicon{filter:brightness(1.2) saturate(.85) hue-rotate(-8deg)}
+.hour.rain-mid{background:#1B3553;border:1px solid #2A5078}
+.hour.rain-mid .hicon{filter:brightness(1) saturate(1.05) hue-rotate(6deg)}
+.hour.rain-high{background:#142338;border:1px solid #1E3A56}
+.hour.rain-high .hicon{filter:brightness(.7) saturate(1.35) hue-rotate(18deg)}
+.day.rain-low{background:#172A3E;border-color:#2A4A66}
+.day.rain-low .dicon{filter:brightness(1.2) saturate(.85) hue-rotate(-8deg)}
+.day.rain-mid{background:#1B3553;border-color:#2A5078}
+.day.rain-mid .dicon{filter:brightness(1) saturate(1.05) hue-rotate(6deg)}
+.day.rain-high{background:#142338;border-color:#1E3A56}
+.day.rain-high .dicon{filter:brightness(.7) saturate(1.35) hue-rotate(18deg)}
 
 .nowfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid #274A67}
 .nowfoot span{font-size:11px;color:var(--muted2);line-height:1.3}
@@ -388,21 +400,6 @@ h1{
 <div class="phone">
 
   <header class="top">
-    <div class="locbar" id="locbar" aria-label="Escolher localidade ou usar minha localização">
-      <button class="locbar-btn" id="btnGPS" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Escolher localidade ou usar minha localização">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
-        <span class="loc-label" id="locLabel">Balsas, MA</span>
-        <svg class="loc-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div class="locmenu" id="locmenu" role="listbox" aria-label="Localidades" hidden></div>
-    </div>
-    <div class="menu" id="menu" hidden>
-      <button data-act="refresh">Atualizar agora</button>
-      <button data-act="locais">Minhas localidades</button>
-      <button data-act="sobre">Sobre este app</button>
-      <button data-act="fonte">Fonte dos dados</button>
-    </div>
-
     <div class="titlerow">
       <h1>Ô Pé d'Água</h1>
       <button class="avatar-float" id="avatarFloat" type="button" aria-label="Avatar do sertão — toque para mudar de estilo">
@@ -414,6 +411,22 @@ h1{
           <circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/>
         </svg>
       </button>
+    </div>
+
+    <div class="locbar" id="locbar" aria-label="Escolher localidade ou usar minha localização">
+      <button class="locbar-btn" id="btnGPS" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Escolher localidade ou usar minha localização">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        <span class="loc-label" id="locLabel">Balsas, MA</span>
+        <svg class="loc-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="locmenu" id="locmenu" role="listbox" aria-label="Localidades" hidden></div>
+    </div>
+    <div class="menu" id="menu" hidden>
+      <button data-act="refresh">Atualizar agora</button>
+      <button data-act="locais">Minhas localidades</button>
+      <button data-act="notifs">🔔 Notificações de chuva</button>
+      <button data-act="sobre">Sobre este app</button>
+      <button data-act="fonte">Fonte dos dados</button>
     </div>
 
     <div class="tabs" role="tablist">
@@ -973,7 +986,14 @@ function aplicarAlerta(){
   }
   bar.hidden = false;
   bar.setAttribute('aria-expanded', 'false');
-  if (a.nivel === 'forte' && !state._alertaSom) { tocarSomAlerta(true); state._alertaSom = Date.now(); }
+  if (a.nivel === 'forte' && !state._alertaSom) {
+    tocarSomAlerta(true);
+    state._alertaSom = Date.now();
+    if ('Notification' in window && Notification.permission === 'granted') {
+      const ic = document.getElementById('avatarFloatImg')?.src || 'icone_app.png';
+      try { new Notification('🌧️ Chuva forte no caminho!', { body: a.titulo + ' — ' + a.texto, icon: ic }); } catch (e) {}
+    }
+  }
   bar.className = 'alertbar ' + (a.nivel === 'info' ? 'info' : a.nivel);
   $('#alertIcon').innerHTML = rainDropSvg(24, a.nivel === 'info' ? '#CFCFCF' : (a.nivel === 'forte' ? '#7A0E0E' : '#5A1B28'));
   $('#alertText').textContent = a.titulo + ' — ' + a.texto;
@@ -1093,7 +1113,8 @@ function renderHoras(d, isDay){
     const label = i === idx ? 'Agora' : String(hh).padStart(2,'0') + ':00';
     const prob = horas.precipitation_probability?.[i];
     const day = horas.is_day ? horas.is_day[i] === 1 : (hh >= 6 && hh < 18);
-    out += `<div class="hour ${i===idx?'agora':''}">
+    const chuvaCls = prob == null ? '' : (prob >= 70 ? ' rain-high' : (prob >= 40 ? ' rain-mid' : (prob > 0 ? ' rain-low' : '')));
+    out += `<div class="hour ${i===idx?'agora':''}${chuvaCls}">
       <div class="pp">${(prob != null && prob >= 15) ? prob + '%' : ''}</div>
       <div class="hicon">${iconSvg(horas.weather_code[i], day, 34)}</div>
       <div class="htemp">${Math.round(horas.temperature_2m[i])}°</div>
@@ -1109,7 +1130,9 @@ function renderDias(d){
     const dt = new Date(d.daily.time[i] + 'T12:00:00');
     const dow = i === 0 ? 'Hoje' : DIAS_CURTOS[dt.getDay()];
     const ddmm = String(dt.getDate()).padStart(2,'0') + '/' + String(dt.getMonth()+1).padStart(2,'0');
-    out += `<button class="day ${i===0?'today':''}" data-day="${i}">
+    const probD = d.daily.precipitation_probability_max?.[i] ?? 0;
+    const chuvaClsD = probD >= 70 ? ' rain-high' : (probD >= 40 ? ' rain-mid' : (probD > 0 ? ' rain-low' : ''));
+    out += `<button class="day ${i===0?'today':''}${chuvaClsD}" data-day="${i}">
       <span class="dow">${dow}</span>
       <span class="ddate">${ddmm}</span>
       <span class="dicon">${iconSvg(d.daily.weather_code[i], true, 30)}</span>
@@ -1260,6 +1283,27 @@ function renderSabedoria(){
 /* ============================================================
    8. AÇÕES
    ============================================================ */
+function ativarNotificacoes(){
+  if (!('Notification' in window)) { toast('Notificações não disponíveis neste navegador'); return; }
+  Notification.requestPermission().then(perm => {
+    if (perm === 'granted') {
+      try { localStorage.setItem('notifs_on', '1'); } catch (e) {}
+      const ic = document.getElementById('avatarFloatImg')?.src || 'icone_app.png';
+      try { new Notification("App Ô Pé d'Água", { body: 'Você será avisado(a) sobre chuvas fortes na região.', icon: ic }); } catch (e) {}
+      toast('Notificações ativadas! 🔔');
+    } else {
+      toast('Permissão negada para notificações.');
+    }
+  });
+}
+
+function ativarNotificacoesMenu(){
+  const ic = document.getElementById('avatarFloatImg')?.src || 'icone_app.png';
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') { ativarNotificacoes(); return; }
+  try { new Notification("App Ô Pé d'Água", { body: 'Você será avisado(a) sobre chuvas fortes na região.', icon: ic }); } catch (e) {}
+}
+
 function usarGPS(){
   if (!navigator.geolocation) { toast('GPS não disponível neste navegador'); return; }
   toast('Obtendo localização…');
@@ -1498,6 +1542,9 @@ function iniciarEventos(){
     }
     if (act === 'fonte'){
       window.open('https://open-meteo.com/', '_blank');
+    }
+    if (act === 'notifs'){
+      ativarNotificacoes();
     }
   });
 
