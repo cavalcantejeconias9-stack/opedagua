@@ -379,7 +379,7 @@ h1{
 }
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
-.alarmrain{position:fixed;inset:0;z-index:150;pointer-events:none;overflow:hidden;background:linear-gradient(180deg,rgba(30,60,90,.4) 0%,rgba(10,22,35,.6) 100%);transition:opacity .4s}
+.alarmrain{position:fixed;inset:0;z-index:150;pointer-events:auto;cursor:pointer;overflow:hidden;background:linear-gradient(180deg,rgba(30,60,90,.4) 0%,rgba(10,22,35,.6) 100%);transition:opacity .4s}
 .alarmrain[hidden]{display:none !important}
 .rdrop{position:absolute;top:-90px;border-radius:3px;background:linear-gradient(180deg,rgba(200,230,255,0) 0%,rgba(190,225,255,.95) 40%,rgba(215,240,255,1) 100%)}
 @keyframes chuvaCair{from{transform:translateY(-10vh)}to{transform:translateY(115vh)}}
@@ -387,7 +387,7 @@ h1{
 .rmsg h4{margin:0 0 6px;font-size:17px;color:#EAF4FF;letter-spacing:.3px}
 .rmsg p{margin:0;font-size:12.5px;color:#BCD3E4;line-height:1.5}
 
-.alarmsun{position:fixed;inset:0;z-index:150;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 45%,#FFFBE6 0%,#FFED7A 30%,#FFD60A 62%,#FFC200 100%);transition:opacity .4s}
+.alarmsun{position:fixed;inset:0;z-index:150;pointer-events:auto;cursor:pointer;overflow:hidden;background:radial-gradient(circle at 50% 45%,#FFFBE6 0%,#FFED7A 30%,#FFD60A 62%,#FFC200 100%);transition:opacity .4s}
 .alarmsun[hidden]{display:none !important}
 .bigsun{position:absolute;top:47%;left:50%;width:170px;height:170px;transform:translate(-50%,-50%);filter:drop-shadow(0 0 70px rgba(255,185,0,.95));animation:solPulse 1.1s ease-in-out infinite}
 @keyframes solPulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.25)}}
@@ -1031,7 +1031,7 @@ function mostrarAlarmeChuva(){
   if (!el) return;
   const a = state.alerta;
   const texto = a && a.texto ? a.texto : 'Chuva forte prevista para a região.';
-  el.innerHTML = '<div class="rmsg"><h4>🌧️ CHUVA FORTE</h4><p>' + texto + '</p></div>';
+  el.innerHTML = '<div class="rmsg"><h4>🌧️ CHUVA FORTE</h4><p>' + texto + '</p><p class="rt">Toque na tela para silenciar</p></div>';
   for (let i = 0; i < 150; i++) {
     const d = document.createElement('span');
     d.className = 'rdrop';
@@ -1042,14 +1042,16 @@ function mostrarAlarmeChuva(){
     d.style.animation = 'chuvaCair ' + (0.85 + Math.random() * 0.95).toFixed(2) + 's ' + (Math.random() * -2).toFixed(2) + 's linear infinite';
     el.appendChild(d);
   }
-  // 2 ondas de 15 segundos cada
+  // 2 ondas de 15 segundos cada — ao tocar, desarma
   let onda = 0;
+  el._disarmado = false;
+  el.onclick = () => { el._disarmado = true; el.hidden = true; };
   const mostrar = () => {
     onda += 1;
     el.hidden = false;
     setTimeout(() => {
       el.hidden = true;
-      if (onda < 2) setTimeout(mostrar, 1500);
+      if (onda < 2 && !el._disarmado) setTimeout(mostrar, 1500);
     }, 15000);
   };
   mostrar();
@@ -1068,9 +1070,11 @@ function mostrarAlarmeSol(){
       '</g>' +
       '<circle cx="50" cy="50" r="17" fill="#FFF6C8" stroke="#FFB200" stroke-width="4.5"/>' +
     '</svg>' +
-    '<div class="smsg">☀️ SOL FORTE<br>céu limpo fora de hora — passe protetor solar e evite o sol do meio-dia</div>';
+    '<div class="smsg">☀️ SOL FORTE<br>céu limpo fora de hora — passe protetor solar e evite o sol do meio-dia<br><span style="font-size:12px;opacity:.85">Toque na tela para silenciar</span></div>';
   el.hidden = false;
-  setTimeout(() => { el.hidden = true; }, 15000);
+  el._disarmado = false;
+  el.onclick = () => { el._disarmado = true; el.hidden = true; };
+  setTimeout(() => { if (!el._disarmado) el.hidden = true; }, 15000);
 }
 
 function tocarSomAlerta(forte) {
@@ -1527,16 +1531,32 @@ function aplicarEstiloIdx(){
   }, 340);
 }
 function avatarPorClima(){
-  // a imagem muda com a estacao do ano e com o dia/noite
-  const h = new Date().getHours();
-  const noite = h >= 18 || h < 6;
-  const m = new Date().getMonth() + 1;
+  const d = state.data;
+  const cur = d && d.current ? d.current : null;
+  const code = cur ? Number(cur.weather_code) : null;
+  const prob = d && d.daily ? Number(d.daily.precipitation_probability_max?.[0] ?? 0) : 0;
+  const mm   = d && d.daily ? Number(d.daily.precipitation_sum?.[0] ?? 0) : 0;
+  const isDia = cur ? cur.is_day === 1 : (new Date().getHours() >= 6 && new Date().getHours() < 18);
+
+  // SOL FIRME (tempo atual, via GPS) -> avatar fica no estilo Verao
+  const solFirme = code != null && (code === 0 || code === 1);
+
+  // CHUVA fixa na tela: se esta chovendo ou se a previsao indicar chuva, o avatar com guarda-chuva fica na tela
+  const chuvaAgora = code != null && ((code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95);
+  const chuvaPrevista = prob >= 60 || mm >= 2;
+  const temChuva = chuvaAgora || chuvaPrevista;
+
   let idx = 0;
-  if (m === 12 || m <= 2) idx = 0;   // Verao (dez-fev)
-  else if (m >= 3 && m <= 5) idx = 2; // Outono (mar-mai)
-  else if (m >= 6 && m <= 8) idx = 1; // Inverno (jun-ago)
-  else idx = 3;                        // Primavera (set-nov)
-  if (noite) idx = 3;                  // noite -> estilo Noite
+  if (temChuva) idx = 1;             // avatar com guarda-chuva
+  else if (solFirme) idx = 0;        // sol firme -> avatar de Verao
+  else if (!isDia) idx = 3;          // noite -> estilo Noite
+  else {
+    const m = new Date().getMonth() + 1;
+    if (m === 12 || m <= 2) idx = 0;    // Verao
+    else if (m >= 3 && m <= 5) idx = 2; // Outono
+    else if (m >= 6 && m <= 8) idx = 1; // Inverno
+    else idx = 3;                        // Primavera
+  }
   estiloIdx = idx;
   const box = document.getElementById('avatarFloat');
   const img = document.getElementById('avatarFloatImg');
