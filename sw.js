@@ -1,10 +1,22 @@
 /* Service Worker — Clima Balsas */
-const CACHE = 'clima-balsas-v53';
+const CACHE = 'clima-balsas-v54';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icone_app.png'
+  './icone_app.png',
+  './av_est01.png',
+  './av_est02.png',
+  './av_est03.png',
+  './av_est04.png',
+  './av_est05.png',
+  './av_est06.png',
+  './av_est07.png',
+  './av_est08.png',
+  './av_est09.png',
+  './av_est10.png',
+  './av_est11.png',
+  './av_est12.png'
 ];
 
 self.addEventListener('install', (e) => {
