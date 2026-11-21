@@ -408,6 +408,21 @@ h1{
   .days{gap:5px}
   .dtemps{font-size:11px}
 }
+/* ============================================================
+   LINK DE ACESSO UNICO
+   ============================================================ */
+.link-expirado{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;background:#92BEE0;
+}
+.expirado-card{
+  max-width:360px;width:100%;background:var(--card);
+  border:1px solid #2A4A66;border-radius:22px;padding:30px 24px;
+  box-shadow:0 2px 10px rgba(0,0,0,.35);text-align:center;color:#E8EEF4;
+}
+.expirado-card h1{font-size:30px;line-height:1.05;letter-spacing:.5px;margin:0 0 18px}
+.expirado-card h1 span{font-size:.62em;color:#CFE0EE}
+.expirado-card p{font-size:14px;line-height:1.55;margin:0;color:#C9C9C9}
 </style>
 </head>
 <body>
@@ -1783,7 +1798,34 @@ function iniciarEventos(){
   });
 }
 
+function verificarAcessoUnico(){
+  const CHAVE = 'opedagua_acesso_unico_v1';
+  let ja = null;
+  try { ja = localStorage.getItem(CHAVE); } catch(e){}
+  const reset = new URLSearchParams(location.search).get('reset') === '1';
+  if (reset){
+    try { localStorage.removeItem(CHAVE); } catch(e){}
+    ja = null;
+    try { history.replaceState(null, '', location.pathname); } catch(e){}
+  }
+  if (!ja){
+    try { localStorage.setItem(CHAVE, String(Date.now())); } catch(e){}
+    return true;
+  }
+  const phone = document.querySelector('.phone');
+  if (phone) phone.remove();
+  const box = document.createElement('div');
+  box.className = 'link-expirado';
+  box.innerHTML = '<div class="expirado-card">'
+    + '<h1>TORÓ<br><span>CLIMA</span></h1>'
+    + '<p>Links expirados são perigosos e vulneráveis. Por favor, procure quem te enviou o link para receber um novo.</p>'
+    + '</div>';
+  document.body.appendChild(box);
+  return false;
+}
+
 async function init(){
+  if (!verificarAcessoUnico()) return;
   $('#icChuva').innerHTML = rainDropSvg(22);
   $('#icVento').innerHTML = windSvg(22);
   $('#icUmidade').innerHTML = humidSvg(22);
