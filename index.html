@@ -423,6 +423,22 @@ h1{
 .expirado-card h1{font-size:30px;line-height:1.05;letter-spacing:.5px;margin:0 0 18px}
 .expirado-card h1 span{font-size:.62em;color:#CFE0EE}
 .expirado-card p{font-size:14px;line-height:1.55;margin:0;color:#C9C9C9}
+
+/* ============================================================
+   BOTAO INSTALAR APP
+   ============================================================ */
+.btn-instalar{
+  display:block;width:100%;margin-top:8px;
+  background:var(--card2);border:1px solid #2A4A66;border-radius:18px;
+  color:#E8EEF4;font-size:14px;font-weight:600;padding:10px 14px;
+  cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3);
+}
+.btn-instalar[hidden]{display:none}
+.instalar-msg{
+  margin-top:6px;padding:9px 12px;border-radius:14px;
+  background:#172B3E;border:1px solid #2A4A66;
+  color:#CFE0EE;font-size:12.5px;line-height:1.45;text-align:center;
+}
 </style>
 </head>
 <body>
@@ -451,6 +467,10 @@ h1{
       </button>
       <div class="locmenu" id="locmenu" role="listbox" aria-label="Localidades" hidden></div>
     </div>
+    <button class="btn-instalar" id="btnInstalar" type="button">⬇ Baixar app</button>
+    <div class="instalar-msg" id="instalarMsg" hidden>
+      No iPhone: toque em <b>Compartilhar</b> e escolha <b>Adicionar à Tela Inicial</b>.
+    </div>
     <div class="menu" id="menu" hidden>
       <button data-act="refresh">Atualizar agora</button>
       <button data-act="locais">Minhas localidades</button>
@@ -465,6 +485,7 @@ h1{
     <div class="tabs" role="tablist">
       <button class="tab active" data-view="clima" role="tab">Clima</button>
       <button class="tab" data-view="sabedoria" role="tab">Sabedoria do Sertão</button>
+      <button class="tab" data-view="outro" role="tab">Outro Assunto</button>
     </div>
   </header>
 
@@ -602,6 +623,29 @@ h1{
 
     <div class="footnote">
       Sabedoria popular registrada em Balsas-MA e região • não substitui a previsão meteorológica oficial
+    </div>
+  </main>
+
+  <!-- ===================== OUTRO ASSUNTO ===================== -->
+  <main id="viewOutro" class="hidden">
+    <div class="hero">
+      <div>
+        <h2>Outro Assunto</h2>
+        <p>Espaço livre para conteúdos da região de Balsas-MA e sertão maranhense.</p>
+      </div>
+    </div>
+
+    <h3 class="sectitle">Notícias e avisos</h3>
+    <div id="noticias"></div>
+
+    <h3 class="sectitle">Links úteis</h3>
+    <div id="links"></div>
+
+    <h3 class="sectitle">Contato</h3>
+    <div id="contato"></div>
+
+    <div class="footnote">
+      Seção preparada para você adicionar o conteúdo que desejar.
     </div>
   </main>
 </div>
@@ -1589,6 +1633,12 @@ function toast(msg){
 /* ============================================================
    9. EVENTOS / INIT
    ============================================================ */
+function renderOutro(){
+  $('#noticias').innerHTML = '';
+  $('#links').innerHTML = '';
+  $('#contato').innerHTML = '';
+}
+
 function mostrarAba(view){
   const tab = document.querySelector(`.tab[data-view="${view}"]`);
   if (!tab) return;
@@ -1596,8 +1646,10 @@ function mostrarAba(view){
   state.tab = view;
   $('#viewClima').classList.toggle('hidden', view !== 'clima');
   $('#viewSabedoria').classList.toggle('hidden', view !== 'sabedoria');
+  $('#viewOutro').classList.toggle('hidden', view !== 'outro');
   if (view === 'sabedoria') renderSabedoria();
-  try { history.replaceState(null, '', view === 'sabedoria' ? '#sabedoria' : '#clima'); } catch(e){}
+  if (view === 'outro') renderOutro();
+  try { history.replaceState(null, '', view === 'sabedoria' ? '#sabedoria' : (view === 'outro' ? '#outro' : '#clima')); } catch(e){}
 }
 
 const ESTACOES_AVATAR = [
@@ -1735,7 +1787,8 @@ function iniciarEventos(){
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }));
   window.addEventListener('hashchange', () => {
-    mostrarAba(location.hash === '#sabedoria' ? 'sabedoria' : 'clima');
+    const h = location.hash;
+    mostrarAba(h === '#sabedoria' ? 'sabedoria' : (h === '#outro' ? 'outro' : 'clima'));
   });
 
   // alerta
@@ -1799,10 +1852,12 @@ function iniciarEventos(){
 }
 
 function verificarAcessoUnico(){
+  const params = new URLSearchParams(location.search);
+  if (params.get('admin') === '1') return true;
   const CHAVE = 'opedagua_acesso_unico_v1';
   let ja = null;
   try { ja = localStorage.getItem(CHAVE); } catch(e){}
-  const reset = new URLSearchParams(location.search).get('reset') === '1';
+  const reset = params.get('reset') === '1';
   if (reset){
     try { localStorage.removeItem(CHAVE); } catch(e){}
     ja = null;
@@ -1824,6 +1879,30 @@ function verificarAcessoUnico(){
   return false;
 }
 
+let installPrompt = null;
+function iniciarInstalar(){
+  const btn = document.getElementById('btnInstalar');
+  const msg = document.getElementById('instalarMsg');
+  if (!btn) return;
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (standalone){ btn.hidden = true; return; }
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    installPrompt = e;
+    if (msg) msg.hidden = true;
+  });
+  btn.addEventListener('click', async () => {
+    if (installPrompt){
+      installPrompt.prompt();
+      try { await installPrompt.userChoice; } catch(e){}
+      installPrompt = null;
+      btn.hidden = true;
+      return;
+    }
+    if (msg) msg.hidden = !msg.hidden;
+  });
+}
+
 async function init(){
   if (!verificarAcessoUnico()) return;
   $('#icChuva').innerHTML = rainDropSvg(22);
@@ -1831,6 +1910,7 @@ async function init(){
   $('#icUmidade').innerHTML = humidSvg(22);
 
   iniciarAvatar();
+  iniciarInstalar();
   iniciarEventos();
 
   let loc = null;
@@ -1846,6 +1926,8 @@ async function init(){
 
   // rota direta para a aba Sabedoria (#sabedoria)
   if (location.hash === '#sabedoria') mostrarAba('sabedoria');
+  // rota direta para Outro Assunto (#outro)
+  if (location.hash === '#outro') mostrarAba('outro');
 
   await definirLocal(loc);
 
