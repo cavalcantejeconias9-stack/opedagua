@@ -1,10 +1,11 @@
 /* Service Worker — Clima Balsas */
-const CACHE = 'clima-balsas-v60';
+const CACHE = 'clima-balsas-v61';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icone_app.png',
+  './av_est00.png',
   './av_est01.png',
   './av_est02.png',
   './av_est03.png',

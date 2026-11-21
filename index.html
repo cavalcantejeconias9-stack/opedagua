@@ -419,7 +419,7 @@ h1{
     <div class="titlerow">
       <h1>Toró<span class="h1-sub">Clima</span><span class="h1-assinatura">by project integração</span></h1>
       <button class="avatar-float" id="avatarFloat" type="button" aria-label="Toque para ver a próxima figura">
-        <img id="avatarFloatImg" src="av_est01.png" alt="Figura da estação">
+        <img id="avatarFloatImg" src="av_est00.png" alt="Figura da estação">
       </button>
       <button class="dots" id="btnMenu" aria-label="Mais opções">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -1586,6 +1586,7 @@ function mostrarAba(view){
 }
 
 const ESTACOES_AVATAR = [
+  { src:'av_est00.png', nome:'Inicial', deco:'verao' },
   { src:'av_est01.png', nome:'Verão', deco:'verao' },
   { src:'av_est02.png', nome:'Verão', deco:'verao' },
   { src:'av_est03.png', nome:'Verão', deco:'verao' },
@@ -1611,6 +1612,7 @@ const ESTACOES_AVATAR = [
 ];
 
 let estiloIdx = 0;
+let avatarTimer = null;
 function aplicarEstiloIdx(){
   const alvo = ESTACOES_AVATAR[estiloIdx];
   const img = document.getElementById('avatarFloatImg');
@@ -1625,6 +1627,11 @@ function iniciarAvatar(){
   if (box) box.addEventListener('click', () => {
     estiloIdx = (estiloIdx + 1) % ESTACOES_AVATAR.length;
     aplicarEstiloIdx();
+    clearTimeout(avatarTimer);
+    avatarTimer = setTimeout(() => {
+      estiloIdx = 0;
+      aplicarEstiloIdx();
+    }, 6000);
   });
 }
 
