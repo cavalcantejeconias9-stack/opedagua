@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0F2B4F">
+<meta name="theme-color" content="#92BEE0">
 <meta name="description" content="Clima em Balsas-MA e região: agora, por hora, 5 dias, chuva, vento e a Sabedoria do Sertão.">
-<title>Ô Pé d'Água • Clima de Balsas-MA</title>
+<title>Toró Clima • Balsas-MA e região</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icone_app.png">
 <link rel="icon" href="icone_app.png">
@@ -15,7 +15,7 @@
    ============================================================ */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0F2B4F;
+  --bg:#92BEE0;
   --card:#14293D;
   --card2:#1B3650;
   --card3:#22425F;
@@ -82,12 +82,16 @@ svg{display:block}
 .locmenu button.on::after{content:"✓";flex:none;margin-left:8px;color:#8FB7E4}
 .locmenu .gps-note{flex:none;color:#8FB7E4;font-size:11px}
 
-.titlerow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 6px}
+.titlerow{display:flex;align-items:center;justify-content:space-between;gap:2px;margin:10px 0 4px}
 h1{
   margin:0 0 2px 4px;
-  font-size:clamp(28px,9vw,42px);line-height:1.05;font-weight:400;letter-spacing:-.5px;
+  font-size:clamp(28px,9vw,42px);line-height:1.05;font-weight:400;letter-spacing:.5px;
+  color:#123A5A;
+  text-transform:uppercase;
   white-space:nowrap;
 }
+.h1-sub{display:block;font-size:.6em;font-weight:400;letter-spacing:.8px;color:#CFE0EE;line-height:1.15;margin-top:2px}
+.h1-assinatura{display:block;font-size:.26em;font-weight:400;letter-spacing:.3px;color:#1D4E73;line-height:1.2;margin-top:3px;text-transform:none}
 .dots{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#DADADA;margin-top:4px}
 .dots:active{background:#17324A}
 
@@ -97,7 +101,7 @@ h1{
   flex:none;
   padding:8px 16px;border-radius:999px;
   background:transparent;border:1px solid #2A4A66;
-  color:#C9C9C9;font-size:13px;letter-spacing:.2px;
+  color:#2F5D80;font-size:13px;letter-spacing:.2px;
   transition:background .2s,color .2s,border-color .2s;
 }
 .tab.active{background:#EDEDED;border-color:#EDEDED;color:#121212;font-weight:500}
@@ -261,7 +265,7 @@ h1{
 .panel .prow b{color:#fff;font-weight:500}
 .panel .ptitle{font-size:11.5px;text-transform:uppercase;letter-spacing:.8px;color:#8F8F8F;margin-bottom:6px}
 
-.footnote{text-align:center;font-size:10.5px;color:#5E5E5E;margin:18px 0 4px;line-height:1.5}
+.footnote{text-align:center;font-size:10.5px;color:#3E6A8C;margin:18px 0 4px;line-height:1.5}
 
 /* ============================================================
    SABEDORIA DO SERTÃO
@@ -269,9 +273,10 @@ h1{
 .hero{display:flex;align-items:center;padding:0 2px 12px}
 
 .hero h2{margin:0;font-size:21px;font-weight:400;letter-spacing:-.2px}
-.hero p{margin:3px 0 0;font-size:12px;color:var(--muted);line-height:1.4}
+.hero h2{color:#123A5A}
+.hero p{margin:3px 0 0;font-size:12px;color:#3E6A8C;line-height:1.4}
 
-.sectitle{font-size:13px;color:#B9B9B9;letter-spacing:.4px;margin:18px 4px 10px;text-transform:uppercase}
+.sectitle{font-size:13px;color:#2F5D80;letter-spacing:.4px;margin:18px 4px 10px;text-transform:uppercase}
 
 .mcard-acc{margin-bottom:8px}
 .mcard-acc .mdata{flex:none;width:54px;text-align:center;padding-top:2px}
@@ -310,30 +315,15 @@ h1{
 
 
 /* ============================================================
-   AVATAR FLUTUANTE
+   AVATAR DAS ESTAÇÕES
    ============================================================ */
 .avatar-float{
-  position:relative;flex:none;
-  width:clamp(112px,25.5vw,140px);height:clamp(132px,30vw,172px);
+  position:relative;flex:none;isolation:isolate;
+  width:clamp(170px,40vw,230px);height:clamp(205px,48vw,272px);
   display:flex;align-items:center;justify-content:center;
   background:none;border:0;padding:0;cursor:pointer;
-  filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));
-  transition:transform .15s;
 }
-.avatar-float:active{transform:scale(.94)}
-.avatar-float img{width:100%;height:100%;object-fit:contain;
-  transition:opacity .32s ease, transform .32s ease;pointer-events:none}
-.avatar-float .avbadge{
-  position:absolute;top:2px;left:50%;transform:translateX(-50%);
-  font-size:9px;letter-spacing:.6px;text-transform:uppercase;
-  background:rgba(9,22,35,.9);border:1px solid #2A4A66;color:#CFE0EE;
-  padding:2px 7px;border-radius:999px;white-space:nowrap;
-  opacity:0;transition:opacity .3s;pointer-events:none;
-}
-.avatar-float.trocando img{opacity:0;transform:translateY(8px) scale(.94)}
-.avatar-float.trocando .avbadge{opacity:1}
-@media (prefers-reduced-motion:reduce){.avatar-float{animation:none}}
-
+.avatar-float img{width:100%;height:100%;max-width:none;object-fit:contain;position:relative;z-index:1;pointer-events:none}
 /* ============================================================
    MODAL (detalhe do dia)
    ============================================================ */
@@ -369,6 +359,11 @@ h1{
 .menu button:last-child{border-bottom:0}
 .menu button:active{background:#1F3D57}
 
+.avisos-app{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top));transform:translateX(-50%);width:min(92vw,430px);z-index:210;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.aviso-app{pointer-events:auto;background:#DCEEFF;color:#123A5A;border:1px solid #7FB4E6;border-radius:16px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.35);font-size:12.5px;line-height:1.45;cursor:pointer;animation:fadeDown .3s ease}
+.aviso-app b{display:block;font-size:13.5px;font-weight:600;margin-bottom:3px}
+.aviso-app small{display:block;margin-top:4px;opacity:.72;font-size:10px}
+
 /* toast */
 .toast{
   position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);
@@ -379,19 +374,23 @@ h1{
 }
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
-.alarmrain{position:fixed;inset:0;z-index:150;pointer-events:auto;cursor:pointer;overflow:hidden;background:linear-gradient(180deg,rgba(30,60,90,.4) 0%,rgba(10,22,35,.6) 100%);transition:opacity .4s}
+.alarmrain{position:fixed;inset:0;z-index:150;pointer-events:auto;cursor:pointer;overflow:hidden;background:linear-gradient(180deg,rgba(30,60,90,.14) 0%,rgba(10,22,35,.22) 100%);transition:opacity 1.1s ease}
 .alarmrain[hidden]{display:none !important}
-.rdrop{position:absolute;top:-90px;border-radius:3px;background:linear-gradient(180deg,rgba(200,230,255,0) 0%,rgba(190,225,255,.95) 40%,rgba(215,240,255,1) 100%)}
+.rdrop{position:absolute;top:-90px;border-radius:3px;background:linear-gradient(180deg,rgba(200,230,255,0) 0%,rgba(190,225,255,.5) 45%,rgba(215,240,255,.65) 100%)}
 @keyframes chuvaCair{from{transform:translateY(-10vh)}to{transform:translateY(115vh)}}
 .rmsg{position:absolute;top:24%;left:50%;transform:translateX(-50%);width:min(88vw,380px);text-align:center;background:rgba(8,18,28,.9);border:1px solid #3A5F7F;border-radius:18px;padding:16px 14px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
 .rmsg h4{margin:0 0 6px;font-size:17px;color:#EAF4FF;letter-spacing:.3px}
 .rmsg p{margin:0;font-size:12.5px;color:#BCD3E4;line-height:1.5}
 
-.alarmsun{position:fixed;inset:0;z-index:150;pointer-events:auto;cursor:pointer;overflow:hidden;background:radial-gradient(circle at 50% 45%,#FFFBE6 0%,#FFED7A 30%,#FFD60A 62%,#FFC200 100%);transition:opacity .4s}
+.alarmsun{position:fixed;inset:0;z-index:150;pointer-events:auto;cursor:pointer;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(255,251,230,.20) 0%,rgba(255,237,122,.16) 30%,rgba(255,214,10,.12) 62%,rgba(255,194,0,.10) 100%);transition:opacity 1.3s ease}
 .alarmsun[hidden]{display:none !important}
-.bigsun{position:absolute;top:47%;left:50%;width:170px;height:170px;transform:translate(-50%,-50%);filter:drop-shadow(0 0 70px rgba(255,185,0,.95));animation:solPulse 1.1s ease-in-out infinite}
-@keyframes solPulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.25)}}
-.smsg{position:absolute;bottom:13%;left:50%;transform:translateX(-50%);width:min(88vw,380px);text-align:center;color:#4A2E00;font-size:16px;font-weight:600;line-height:1.4}
+.bigsun{position:absolute;top:18%;left:50%;width:170px;height:170px;transform:translate(-50%,-50%);opacity:.55;filter:drop-shadow(0 0 45px rgba(255,200,50,.45));animation:solPulse 2.8s ease-in-out infinite}
+@keyframes solPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.45}50%{transform:translate(-50%,-50%) scale(1.12);opacity:.7}}
+.smsg{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);width:min(88vw,380px);text-align:center;color:#3A2600;font-size:15px;font-weight:600;line-height:1.45;background:rgba(255,248,210,.32);border:1px solid rgba(255,220,120,.35);border-radius:16px;padding:10px 12px;text-shadow:0 1px 2px rgba(255,255,255,.45)}
+
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+.alarmrain:not([hidden]),.alarmsun:not([hidden]){animation:overlayIn 1s ease both}
+.alarmrain.saindo,.alarmsun.saindo{animation:none !important;opacity:0;transition:opacity 1.1s ease}
 
 /* esqueleto */
 .skel{background:linear-gradient(90deg,#17304A 25%,#1F405E 37%,#17304A 63%);background-size:400% 100%;animation:sk 1.3s ease infinite;border-radius:8px;color:transparent !important}
@@ -417,10 +416,9 @@ h1{
 
   <header class="top">
     <div class="titlerow">
-      <h1>Ô Pé d'Água</h1>
-      <button class="avatar-float" id="avatarFloat" type="button" aria-label="Avatar do sertão — toque para mudar de estilo">
-        <span class="avbadge" id="avBadge">Verão</span>
-        <img id="avatarFloatImg" src="av_verao.png" alt="Avatar do sertão">
+      <h1>Toró<span class="h1-sub">Clima</span><span class="h1-assinatura">by project integração</span></h1>
+      <button class="avatar-float" id="avatarFloat" type="button" aria-label="Toque para ver a próxima figura">
+        <img id="avatarFloatImg" src="av_est01.png" alt="Figura da estação">
       </button>
       <button class="dots" id="btnMenu" aria-label="Mais opções">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -443,6 +441,7 @@ h1{
       <button data-act="notifs">🔔 Notificações de chuva</button>
       <button data-act="testeSol">☀️ Teste: sol forte</button>
       <button data-act="testeChuva">🌧️ Teste: chuva forte</button>
+      <button data-act="testeMitos">📅 Teste: avisos dos dias</button>
       <button data-act="sobre">Sobre este app</button>
       <button data-act="fonte">Fonte dos dados</button>
     </div>
@@ -566,12 +565,12 @@ h1{
   <main id="viewSabedoria" class="hidden">
     <div class="hero">
             <div>
-        <h2>Sabedoria do Sertão</h2>
+        <h2>Saberes Antigos</h2>
         <p>Macrorregião Sul Maranhão e Oeste Tocantins — o céu que o povo sabe ler</p>
       </div>
     </div>
 
-<h3 class="sectitle">Mitos das Regiões</h3>
+<h3 class="sectitle">Ciência do Sertão</h3>
     <div id="mitos"></div>
 
     <h3 class="sectitle">Classificação sertaneja da chuva</h3>
@@ -597,6 +596,7 @@ h1{
   <div class="sheet" id="sheetBody"></div>
 </div>
 
+<div class="avisos-app" id="avisosApp" aria-live="polite"></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -946,7 +946,7 @@ const MITOS = [
   { dia:19, mes:3, titulo:'Dia de São José', quando:'19 de março',
     texto:'“Se chover no dia de São José, o inverno é bom e a roça dá.” No sul do Maranhão e no oeste do Tocantins, a chuva de março é o primeiro aviso do inverno sertanejo — o caju já floresce e o chão esfria.' },
   { dia:13, mes:12, titulo:'Experiências de Santa Luzia', quando:'13 de dezembro',
-    texto:'“Santa Luzia, se chover, o inverno vem cedo.” O povo observa o dia 13 e conta as experiências: chuva fina é inverno manso; trovoada é inverno de toró.' },
+    texto:'“Santa Luzia, se chover, o inverno vem cedo.” O povo observa o dia 13 e conta as experiências: chuva fina é inverno manso; trovoada é inverno de toró. <b>Experiência do sal:</b> na noite do dia 12 para o 13, espalhe grãos de sal grosso num prato limpo e deixe ao ar livre, na varanda ou no quintal. De manhã, olhe: se os grãos estiverem úmidos e grudados, é sinal de chuva próxima; se estiverem secos e soltos, o tempo segue seco. É crença popular — não substitui a previsão técnica.' },
   { dia:24, mes:6, titulo:'Dia de São João', quando:'24 de junho',
     texto:'“São João sereno, inverno bom; São João com chuva, veranico na certa.” June é verão sertanejo (seco) na região, então chuva nesse dia é sinal de tempo trocado.' },
   { emo:'🐜', titulo:'Formigas andando muito', quando:'chuvoso',
@@ -1008,10 +1008,7 @@ function aplicarAlerta(){
     tocarSomAlerta(true);
     state._alertaSom = Date.now();
     mostrarAlarmeChuva();
-    if ('Notification' in window && Notification.permission === 'granted') {
-      const ic = document.getElementById('avatarFloatImg')?.src || 'icone_app.png';
-      try { new Notification('🌧️ Chuva forte no caminho!', { body: a.titulo + ' — ' + a.texto, icon: ic }); } catch (e) {}
-    }
+    notificarApp('🌧️ Chuva forte no caminho!', a.titulo + ' — ' + a.texto);
   }
   bar.className = 'alertbar ' + (a.nivel === 'info' ? 'info' : a.nivel);
   $('#alertIcon').innerHTML = rainDropSvg(24, a.nivel === 'info' ? '#CFCFCF' : (a.nivel === 'forte' ? '#7A0E0E' : '#5A1B28'));
@@ -1026,31 +1023,46 @@ function alternarAlertas(){
 }
 
 // Toca um som de alerta (Web Audio API) — forte para alerta extremo, curto para confirmacao
+function mostrarOverlay(el){
+  el.classList.remove('saindo');
+  el.hidden = false;
+}
+function ocultarOverlay(el){
+  if (!el || el.hidden) return;
+  el.classList.add('saindo');
+  setTimeout(() => {
+    if (el.classList.contains('saindo')) {
+      el.hidden = true;
+      el.classList.remove('saindo');
+    }
+  }, 1100);
+}
+
 function mostrarAlarmeChuva(){
   const el = document.getElementById('alarmRain');
   if (!el) return;
   const a = state.alerta;
   const texto = a && a.texto ? a.texto : 'Chuva forte prevista para a região.';
   el.innerHTML = '<div class="rmsg"><h4>🌧️ CHUVA FORTE</h4><p>' + texto + '</p><p class="rt">Toque na tela para silenciar</p></div>';
-  for (let i = 0; i < 150; i++) {
+  for (let i = 0; i < 55; i++) {
     const d = document.createElement('span');
     d.className = 'rdrop';
     d.style.left = (Math.random() * 100).toFixed(1) + 'vw';
     d.style.width = (Math.random() * 1.5 + 1.5).toFixed(1) + 'px';
-    d.style.height = (50 + Math.random() * 60).toFixed(0) + 'px';
-    d.style.opacity = (Math.random() * 0.55 + 0.45).toFixed(2);
-    d.style.animation = 'chuvaCair ' + (0.85 + Math.random() * 0.95).toFixed(2) + 's ' + (Math.random() * -2).toFixed(2) + 's linear infinite';
+    d.style.height = (38 + Math.random() * 44).toFixed(0) + 'px';
+    d.style.opacity = (Math.random() * 0.28 + 0.22).toFixed(2);
+    d.style.animation = 'chuvaCair ' + (1.9 + Math.random() * 1.4).toFixed(2) + 's ' + (Math.random() * -3).toFixed(2) + 's linear infinite';
     el.appendChild(d);
   }
   // 2 ondas de 15 segundos cada — ao tocar, desarma
   let onda = 0;
   el._disarmado = false;
-  el.onclick = () => { el._disarmado = true; el.hidden = true; };
+  el.onclick = () => { el._disarmado = true; ocultarOverlay(el); };
   const mostrar = () => {
     onda += 1;
-    el.hidden = false;
+    mostrarOverlay(el);
     setTimeout(() => {
-      el.hidden = true;
+      ocultarOverlay(el);
       if (onda < 2 && !el._disarmado) setTimeout(mostrar, 1500);
     }, 15000);
   };
@@ -1062,19 +1074,19 @@ function mostrarAlarmeSol(){
   if (!el) return;
   el.innerHTML =
     '<svg class="bigsun" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sol forte">' +
-      '<g stroke="#FFB200" stroke-width="5.5" stroke-linecap="round">' +
+      '<g stroke="rgba(255,178,0,.55)" stroke-width="5.5" stroke-linecap="round">' +
         '<line x1="50" y1="2" x2="50" y2="17"/><line x1="50" y1="83" x2="50" y2="98"/>' +
         '<line x1="2" y1="50" x2="17" y2="50"/><line x1="83" y1="50" x2="98" y2="50"/>' +
         '<line x1="16" y1="16" x2="27" y2="27"/><line x1="73" y1="73" x2="84" y2="84"/>' +
         '<line x1="16" y1="84" x2="27" y2="73"/><line x1="73" y1="27" x2="84" y2="16"/>' +
       '</g>' +
-      '<circle cx="50" cy="50" r="17" fill="#FFF6C8" stroke="#FFB200" stroke-width="4.5"/>' +
+      '<circle cx="50" cy="50" r="17" fill="rgba(255,246,200,.45)" stroke="rgba(255,178,0,.6)" stroke-width="4.5"/>' +
     '</svg>' +
     '<div class="smsg">☀️ SOL FORTE<br>céu limpo fora de hora — passe protetor solar e evite o sol do meio-dia<br><span style="font-size:12px;opacity:.85">Toque na tela para silenciar</span></div>';
-  el.hidden = false;
+  mostrarOverlay(el);
   el._disarmado = false;
-  el.onclick = () => { el._disarmado = true; el.hidden = true; };
-  setTimeout(() => { if (!el._disarmado) el.hidden = true; }, 15000);
+  el.onclick = () => { el._disarmado = true; ocultarOverlay(el); };
+  setTimeout(() => { if (!el._disarmado) ocultarOverlay(el); }, 15000);
 }
 
 function tocarSomAlerta(forte) {
@@ -1109,6 +1121,72 @@ function tocarSomAlerta(forte) {
   } catch (e) { console.warn('Som de alerta indisponível:', e.message); }
 }
 
+/* ============================================================
+   AVISOS DOS MITOS (datas especiais)
+   ============================================================ */
+const AVISOS_MITOS = [
+  { dia:19, mes:3,  nome:'São José' },
+  { dia:13, mes:12, nome:'Santa Luzia' },
+  { dia:24, mes:6,  nome:'São João' }
+];
+function notificarApp(titulo, texto){
+  const box = document.getElementById('avisosApp');
+  if (!box) return;
+  const el = document.createElement('div');
+  el.className = 'aviso-app';
+  el.innerHTML = '<b>' + titulo + '</b><span>' + texto + '</span><small>Toque para fechar</small>';
+  el.addEventListener('click', () => { if (el.parentNode) el.remove(); });
+  box.appendChild(el);
+  setTimeout(() => { if (el.parentNode) el.remove(); }, 12000);
+  if ('Notification' in window && Notification.permission === 'granted') {
+    const ic = 'icone_app.png';
+    try { new Notification(titulo, { body: texto, icon: ic }); } catch (e) {}
+  }
+}
+function condicoesMit(d){
+  const cur = (d && d.current) || {};
+  const code = Number(cur.weather_code);
+  const prob = Number(d?.daily?.precipitation_probability_max?.[0] ?? 0);
+  const mm = Number(d?.daily?.precipitation_sum?.[0] ?? 0);
+  const chuvaAgora = (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95;
+  return { prob, mm, chuvoso: chuvaAgora || prob >= 60 || mm >= 2 };
+}
+function textoAvisoMito(m, c, falta){
+  const perto = falta === 0 ? 'é hoje' : (falta === 1 ? 'é amanhã' : 'se aproxima em ' + falta + ' dias');
+  if (m.dia === 19 && m.mes === 3) {
+    return c.chuvoso
+      ? { titulo:'🌧️ Dia de São José ' + perto, texto:'Muita chuva prevista: atenção ao risco de enchente de São José. ' + c.prob + '% de chance, até ' + c.mm.toFixed(1) + ' mm. Evite travessias e estradas alagadas.' }
+      : { titulo:'☀️ Dia de São José ' + perto, texto:'Tempo seco previsto. O povo diz que, sem chuva em São José, o inverno pode tardar a chegar.' };
+  }
+  if (m.dia === 13 && m.mes === 12) {
+    return c.chuvoso
+      ? { titulo:'🧂 Experiências de Santa Luzia ' + perto, texto:'Umidade prevista: faça a experiência do sal grosso — espalhe os grãos num prato ao ar livre; se grudarem, sinal de chuva. Trovoada é inverno de toró.' }
+      : { titulo:'🧂 Experiências de Santa Luzia ' + perto, texto:'Tempo seco previsto: os grãos de sal grosso devem ficar secos e soltos. O povo diz que Santa Luzia seca anuncia inverno mais tardio.' };
+  }
+  return c.chuvoso
+    ? { titulo:'🎇 Dia de São João ' + perto, texto:'Chuva prevista para o dia de São João: o ditado diz que vem veranico. Fique de olho no céu.' }
+    : { titulo:'🎇 Dia de São João ' + perto, texto:'São João sereno: o ditado diz que o inverno será bom e a roça dá.' };
+}
+function verificarMitosProximos(d, forcar){
+  if (!d) return;
+  if (!forcar) {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    try { if (localStorage.getItem('notifs_on') !== '1') return; } catch (e) { return; }
+  }
+  const hoje = new Date().toISOString().slice(0, 10);
+  const c = condicoesMit(d);
+  AVISOS_MITOS.forEach(m => {
+    const falta = diasAte(m.dia, m.mes);
+    if (!forcar && falta > 3) return;
+    const chave = 'aviso_mito_' + m.dia + '_' + m.mes + '_' + hoje;
+    if (!forcar) {
+      try { if (localStorage.getItem(chave) === '1') return; localStorage.setItem(chave, '1'); } catch (e) {}
+    }
+    const aviso = textoAvisoMito(m, c, falta);
+    notificarApp(aviso.titulo, aviso.texto);
+  });
+}
+
 function renderTudo(){
   const d = state.data;
   if (!d) return;
@@ -1139,6 +1217,7 @@ function renderTudo(){
   // alerta
   state.alerta = calcularAlerta(d);
   aplicarAlerta();
+  verificarMitosProximos(d);
 
   // cena
   $('#scene').innerHTML = sceneSvg(isDay, cur.weather_code);
@@ -1175,7 +1254,6 @@ function renderTudo(){
   renderAcordeoes();
   renderSabedoria();
 
-  avatarPorClima();
 
   // localidades
   renderLocButton();
@@ -1370,8 +1448,7 @@ function ativarNotificacoes(){
   Notification.requestPermission().then(perm => {
     if (perm === 'granted') {
       try { localStorage.setItem('notifs_on', '1'); } catch (e) {}
-      const ic = document.getElementById('avatarFloatImg')?.src || 'icone_app.png';
-      try { new Notification("App Ô Pé d'Água", { body: 'Você será avisado(a) sobre chuvas fortes na região.', icon: ic }); } catch (e) {}
+      notificarApp('App Toró Clima', 'Você será avisado(a) sobre chuvas fortes e sobre os dias dos mitos.');
       toast('Notificações ativadas! 🔔');
     } else {
       toast('Permissão negada para notificações.');
@@ -1380,10 +1457,9 @@ function ativarNotificacoes(){
 }
 
 function ativarNotificacoesMenu(){
-  const ic = document.getElementById('avatarFloatImg')?.src || 'icone_app.png';
   if (!('Notification' in window)) return;
   if (Notification.permission !== 'granted') { ativarNotificacoes(); return; }
-  try { new Notification("App Ô Pé d'Água", { body: 'Você será avisado(a) sobre chuvas fortes na região.', icon: ic }); } catch (e) {}
+  notificarApp('App Toró Clima', 'Você será avisado(a) sobre chuvas fortes e sobre os dias dos mitos.');
 }
 
 function usarGPS(){
@@ -1508,70 +1584,40 @@ function mostrarAba(view){
   try { history.replaceState(null, '', view === 'sabedoria' ? '#sabedoria' : '#clima'); } catch(e){}
 }
 
-const ESTILOS_AVATAR = [
-  { src:'av_verao.png',    nome:'Verão' },
-  { src:'av_inverno.png',  nome:'Chuva' },
-  { src:'av_outono.png',   nome:'Nublado' },
-  { src:'av_primavera.png',nome:'Noite' },
-  { src:'avatar_loura.png',nome:'Loira' }
+const ESTACOES_AVATAR = [
+  { src:'av_est01.png', nome:'Verão', deco:'verao' },
+  { src:'av_est02.png', nome:'Verão', deco:'verao' },
+  { src:'av_est03.png', nome:'Verão', deco:'verao' },
+  { src:'av_est04.png', nome:'Verão', deco:'verao' },
+  { src:'av_est05.png', nome:'Primavera', deco:'primavera' },
+  { src:'av_est06.png', nome:'Primavera', deco:'primavera' },
+  { src:'av_est07.png', nome:'Primavera', deco:'primavera' },
+  { src:'av_est08.png', nome:'Primavera', deco:'primavera' },
+  { src:'av_est09.png', nome:'Inverno', deco:'inverno' },
+  { src:'av_est10.png', nome:'Inverno', deco:'inverno' },
+  { src:'av_est11.png', nome:'Inverno', deco:'inverno' },
+  { src:'av_est12.png', nome:'Inverno', deco:'inverno' },
+  { src:'av_est13.png', nome:'Outono', deco:'outono' },
+  { src:'av_est14.png', nome:'Outono', deco:'outono' },
+  { src:'av_est15.png', nome:'Outono', deco:'outono' },
+  { src:'av_est16.png', nome:'Outono', deco:'outono' },
+  { src:'av_est17.png', nome:'Figura 17', deco:'verao' }
 ];
 
 let estiloIdx = 0;
 function aplicarEstiloIdx(){
-  const alvo = ESTILOS_AVATAR[estiloIdx];
-  const box = document.getElementById('avatarFloat');
+  const alvo = ESTACOES_AVATAR[estiloIdx];
   const img = document.getElementById('avatarFloatImg');
-  const badge = document.getElementById('avBadge');
-  if (!box || !img) return;
-  if (badge) badge.textContent = alvo.nome;
-  box.classList.add('trocando');
-  setTimeout(() => {
-    img.src = alvo.src;
-    box.classList.remove('trocando');
-  }, 340);
-}
-function avatarPorClima(){
-  const d = state.data;
-  const cur = d && d.current ? d.current : null;
-  const code = cur ? Number(cur.weather_code) : null;
-  const prob = d && d.daily ? Number(d.daily.precipitation_probability_max?.[0] ?? 0) : 0;
-  const mm   = d && d.daily ? Number(d.daily.precipitation_sum?.[0] ?? 0) : 0;
-  const isDia = cur ? cur.is_day === 1 : (new Date().getHours() >= 6 && new Date().getHours() < 18);
-
-  // SOL FIRME (tempo atual, via GPS) -> avatar fica no estilo Verao
-  const solFirme = code != null && (code === 0 || code === 1);
-
-  // CHUVA fixa na tela: se esta chovendo ou se a previsao indicar chuva, o avatar com guarda-chuva fica na tela
-  const chuvaAgora = code != null && ((code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95);
-  const chuvaPrevista = prob >= 60 || mm >= 2;
-  const temChuva = chuvaAgora || chuvaPrevista;
-
-  let idx = 0;
-  if (temChuva) idx = 1;             // avatar com guarda-chuva
-  else if (solFirme) idx = 0;        // sol firme -> avatar de Verao
-  else if (!isDia) idx = 3;          // noite -> estilo Noite
-  else {
-    const m = new Date().getMonth() + 1;
-    if (m === 12 || m <= 2) idx = 0;    // Verao
-    else if (m >= 3 && m <= 5) idx = 2; // Outono
-    else if (m >= 6 && m <= 8) idx = 1; // Inverno
-    else idx = 3;                        // Primavera
-  }
-  estiloIdx = idx;
   const box = document.getElementById('avatarFloat');
-  const img = document.getElementById('avatarFloatImg');
-  const badge = document.getElementById('avBadge');
-  if (!box || !img) return;
-  const alvo = ESTILOS_AVATAR[estiloIdx];
+  if (!img || !alvo) return;
   if (img.getAttribute('src') !== alvo.src) img.src = alvo.src;
-  if (badge) badge.textContent = alvo.nome;
+  if (box) box.className = 'avatar-float';
 }
 function iniciarAvatar(){
-  ESTILOS_AVATAR.forEach(a => { const i = new Image(); i.src = a.src; });
-  avatarPorClima();
+  aplicarEstiloIdx();
   const box = document.getElementById('avatarFloat');
   if (box) box.addEventListener('click', () => {
-    estiloIdx = (estiloIdx + 1) % ESTILOS_AVATAR.length;
+    estiloIdx = (estiloIdx + 1) % ESTACOES_AVATAR.length;
     aplicarEstiloIdx();
   });
 }
@@ -1650,6 +1696,9 @@ function iniciarEventos(){
     if (act === 'testeChuva'){
       mostrarAlarmeChuva();
     }
+    if (act === 'testeMitos'){
+      verificarMitosProximos(state.data, true);
+    }
   });
 
   // abas
@@ -1726,8 +1775,8 @@ async function init(){
   $('#icVento').innerHTML = windSvg(22);
   $('#icUmidade').innerHTML = humidSvg(22);
 
-  iniciarEventos();
   iniciarAvatar();
+  iniciarEventos();
 
   let loc = null;
   try {

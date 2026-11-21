@@ -1,13 +1,13 @@
 {
-  "name": "Ô Pé d'Água — Clima de Balsas-MA e Sabedoria do Sertão",
-  "short_name": "Ô Pé d'Água",
-  "description": "Clima em tempo real em Balsas-MA e região, com a Sabedoria do Sertão. Fundo escuro, cards azuis e avatar flutuante.",
+  "name": "Toró Clima — Balsas-MA e Sabedoria do Sertão",
+  "short_name": "Toró Clima",
+  "description": "Clima em tempo real em Balsas-MA e região, com Saberes Antigos e Ciência do Sertão.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#121212",
-  "theme_color": "#121212",
+  "background_color": "#92BEE0",
+  "theme_color": "#92BEE0",
   "lang": "pt-BR",
   "dir": "ltr",
   "categories": [
