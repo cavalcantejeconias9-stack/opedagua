@@ -321,9 +321,14 @@ h1{
   position:relative;flex:none;isolation:isolate;
   width:clamp(170px,40vw,230px);height:clamp(205px,48vw,272px);
   display:flex;align-items:center;justify-content:center;
-  background:none;border:0;padding:0;cursor:pointer;
+  background:#fff;border-radius:50%;border:0;padding:0;cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
 }
-.avatar-float img{width:100%;height:100%;max-width:none;object-fit:contain;position:relative;z-index:1;pointer-events:none}
+.avatar-float::before{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:#fff;z-index:0;
+}
+.avatar-float img{width:100%;height:100%;max-width:none;object-fit:contain;position:relative;z-index:2;pointer-events:none}
 /* ============================================================
    MODAL (detalhe do dia)
    ============================================================ */
