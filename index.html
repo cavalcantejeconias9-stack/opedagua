@@ -315,16 +315,6 @@ h1{
 
 
 /* ============================================================
-   AVATAR DAS ESTAÇÕES
-   ============================================================ */
-.avatar-float{
-  position:relative;flex:none;isolation:isolate;
-  width:clamp(170px,40vw,230px);height:clamp(205px,48vw,272px);
-  display:flex;align-items:center;justify-content:center;
-  background:none;border:0;padding:0;cursor:pointer;
-}
-.avatar-float img{width:100%;height:100%;max-width:none;object-fit:contain;position:relative;z-index:1;pointer-events:none}
-/* ============================================================
    MODAL (detalhe do dia)
    ============================================================ */
 .sheetwrap{position:fixed;inset:0;z-index:120;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.66)}
@@ -417,9 +407,6 @@ h1{
   <header class="top">
     <div class="titlerow">
       <h1>Toró<span class="h1-sub">Clima</span><span class="h1-assinatura">by project integração</span></h1>
-      <button class="avatar-float" id="avatarFloat" type="button" aria-label="Toque para ver a próxima figura">
-        <img id="avatarFloatImg" src="av_est01.png" alt="Figura da estação">
-      </button>
       <button class="dots" id="btnMenu" aria-label="Mais opções">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
           <circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/>
@@ -1584,44 +1571,6 @@ function mostrarAba(view){
   try { history.replaceState(null, '', view === 'sabedoria' ? '#sabedoria' : '#clima'); } catch(e){}
 }
 
-const ESTACOES_AVATAR = [
-  { src:'av_est01.png', nome:'Verão', deco:'verao' },
-  { src:'av_est02.png', nome:'Verão', deco:'verao' },
-  { src:'av_est03.png', nome:'Verão', deco:'verao' },
-  { src:'av_est04.png', nome:'Verão', deco:'verao' },
-  { src:'av_est05.png', nome:'Primavera', deco:'primavera' },
-  { src:'av_est06.png', nome:'Primavera', deco:'primavera' },
-  { src:'av_est07.png', nome:'Primavera', deco:'primavera' },
-  { src:'av_est08.png', nome:'Primavera', deco:'primavera' },
-  { src:'av_est09.png', nome:'Inverno', deco:'inverno' },
-  { src:'av_est10.png', nome:'Inverno', deco:'inverno' },
-  { src:'av_est11.png', nome:'Inverno', deco:'inverno' },
-  { src:'av_est12.png', nome:'Inverno', deco:'inverno' },
-  { src:'av_est13.png', nome:'Outono', deco:'outono' },
-  { src:'av_est14.png', nome:'Outono', deco:'outono' },
-  { src:'av_est15.png', nome:'Outono', deco:'outono' },
-  { src:'av_est16.png', nome:'Outono', deco:'outono' },
-  { src:'av_est17.png', nome:'Figura 17', deco:'verao' }
-];
-
-let estiloIdx = 0;
-function aplicarEstiloIdx(){
-  const alvo = ESTACOES_AVATAR[estiloIdx];
-  const img = document.getElementById('avatarFloatImg');
-  const box = document.getElementById('avatarFloat');
-  if (!img || !alvo) return;
-  if (img.getAttribute('src') !== alvo.src) img.src = alvo.src;
-  if (box) box.className = 'avatar-float';
-}
-function iniciarAvatar(){
-  aplicarEstiloIdx();
-  const box = document.getElementById('avatarFloat');
-  if (box) box.addEventListener('click', () => {
-    estiloIdx = (estiloIdx + 1) % ESTACOES_AVATAR.length;
-    aplicarEstiloIdx();
-  });
-}
-
 function iniciarEventos(){
   // GPS: abre o menu de localidades (clicar em 'Minha localização' ativa o GPS)
   // dropdown de localidades
@@ -1775,7 +1724,6 @@ async function init(){
   $('#icVento').innerHTML = windSvg(22);
   $('#icUmidade').innerHTML = humidSvg(22);
 
-  iniciarAvatar();
   iniciarEventos();
 
   let loc = null;
