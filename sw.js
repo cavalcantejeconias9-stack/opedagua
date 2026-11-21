@@ -1,5 +1,5 @@
 /* Service Worker — Clima Balsas */
-const CACHE = 'clima-balsas-v65';
+const CACHE = 'clima-balsas-v66';
 const ASSETS = [
   './',
   './index.html',

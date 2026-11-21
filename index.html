@@ -1851,29 +1851,29 @@ function iniciarEventos(){
   });
 }
 
-function verificarAcessoUnico(){
+function verificarLink(){
   const params = new URLSearchParams(location.search);
-  if (params.get('admin') === '1') return true;
-  const CHAVE = 'opedagua_acesso_unico_v1';
-  let ja = null;
-  try { ja = localStorage.getItem(CHAVE); } catch(e){}
-  const reset = params.get('reset') === '1';
-  if (reset){
-    try { localStorage.removeItem(CHAVE); } catch(e){}
-    ja = null;
-    try { history.replaceState(null, '', location.pathname); } catch(e){}
+  const CHAVE = 'opedagua_link_ok_v1';
+  const tokensValidos = ['toro2026', '1'];
+  const token = params.get('k') || params.get('admin');
+  let liberado = false;
+  try { liberado = localStorage.getItem(CHAVE) === '1'; } catch(e){}
+  if (token && tokensValidos.indexOf(token) !== -1){
+    try { localStorage.setItem(CHAVE, '1'); } catch(e){}
+    liberado = true;
   }
-  if (!ja){
-    try { localStorage.setItem(CHAVE, String(Date.now())); } catch(e){}
-    return true;
+  // esconde o token da barra de endereco: quem recebeu nao consegue repassar o link
+  if (params.toString()){
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch(e){}
   }
+  if (liberado) return true;
   const phone = document.querySelector('.phone');
   if (phone) phone.remove();
   const box = document.createElement('div');
   box.className = 'link-expirado';
   box.innerHTML = '<div class="expirado-card">'
     + '<h1>TORÓ<br><span>CLIMA</span></h1>'
-    + '<p>Links expirados são perigosos e vulneráveis. Por favor, procure quem te enviou o link para receber um novo.</p>'
+    + '<p>Este link é exclusivo e não pode ser compartilhado. Peça o seu próprio link a quem te enviou.</p>'
     + '</div>';
   document.body.appendChild(box);
   return false;
@@ -1904,7 +1904,7 @@ function iniciarInstalar(){
 }
 
 async function init(){
-  if (!verificarAcessoUnico()) return;
+  if (!verificarLink()) return;
   $('#icChuva').innerHTML = rainDropSvg(22);
   $('#icVento').innerHTML = windSvg(22);
   $('#icUmidade').innerHTML = humidSvg(22);
